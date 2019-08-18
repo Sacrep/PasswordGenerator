@@ -15,17 +15,12 @@ namespace PasswordGenerator
     {
         [FunctionName("GeneratePassword")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "{account}/{length}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "{account}/{length}")] HttpRequest req,
             ILogger log,
             string account,
             int length = 12)
         {
             log.LogInformation($"GeneratePassword called to generate password for {account} account");
-
-            if (account == null)
-            {
-                return new BadRequestObjectResult("Please pass an account name to generate the password for");
-            }
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
